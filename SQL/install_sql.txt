@@ -1,1 +1,0 @@
-ALTER TABLE `ezpages` ADD `pages_meta_title` VARCHAR(255) NOT NULL AFTER `pages_html_text`, ADD `pages_meta_keywords` VARCHAR(255) NOT NULL AFTER `pages_meta_title`, ADD `pages_meta_description` VARCHAR(255) NOT NULL AFTER `pages_meta_keywords`;
