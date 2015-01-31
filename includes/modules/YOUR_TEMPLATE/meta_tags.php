@@ -317,28 +317,33 @@ switch ($_GET['main_page']) {
   if (defined('META_TAG_TITLE_EZPAGE_'.$ezpage_id)) define('META_TAG_TITLE', constant('META_TAG_TITLE_EZPAGE_'.$ezpage_id));
   if (defined('META_TAG_DESCRIPTION_EZPAGE_'.$ezpage_id)) define('META_TAG_DESCRIPTION', constant('META_TAG_DESCRIPTION_EZPAGE_'.$ezpage_id));
   if (defined('META_TAG_KEYWORDS_EZPAGE_'.$ezpage_id)) define('META_TAG_KEYWORDS', constant('META_TAG_KEYWORDS_EZPAGE_'.$ezpage_id));
-/***** BEGIN EZPAGES SEO MOD *****/
-  $sql = "select pages_meta_title, pages_meta_keywords, pages_meta_description FROM " . TABLE_EZPAGES . " WHERE pages_id = " . $ezpage_id;
+  
+//-bof-ezpages_metatags-lat9  *** 1 of 1 ***
+  $sql = "SELECT pages_meta_title, pages_meta_keywords, pages_meta_description FROM " . TABLE_EZPAGES . " WHERE pages_id = $ezpage_id";
   $ezpage_metatags = $db->Execute($sql);
   if ($ezpage_metatags->EOF) {
     $meta_tags_over_ride = true;
+    
   } else {
-    if (!empty($ezpage_metatags->fields['pages_meta_title'])) {
-      define('META_TAG_TITLE', zen_clean_html($ezpage_metatags->fields['pages_meta_title']));
+    if (zen_not_null ($ezpage_metatags->fields['pages_meta_title'])) {
+      define ('META_TAG_TITLE', zen_clean_html ($ezpage_metatags->fields['pages_meta_title']));
     }
-    if (!empty($ezpage_metatags->fields['pages_meta_keywords'])) {
-      define('META_TAG_KEYWORDS', zen_clean_html($ezpage_metatags->fields['pages_meta_keywords']));
+    if (zen_not_null ($ezpage_metatags->fields['pages_meta_keywords'])) {
+      define ('META_TAG_KEYWORDS', zen_clean_html ($ezpage_metatags->fields['pages_meta_keywords']));
     }
-    if (!empty($ezpage_metatags->fields['pages_meta_description'])) {
-      define('META_TAG_DESCRIPTION', zen_clean_html($ezpage_metatags->fields['pages_meta_description']));
+    if (zen_not_null ($ezpage_metatags->fields['pages_meta_description'])) {
+      define ('META_TAG_DESCRIPTION', zen_clean_html ($ezpage_metatags->fields['pages_meta_description']));
     }
   }
-/**** END EZPAGES SEO MOD *****/
+
   // NO "break" here. Allow defaults if not overridden at the per-page level
   default:
-  define('META_TAG_TITLE', (defined('NAVBAR_TITLE') ? NAVBAR_TITLE . PRIMARY_SECTION : '') . TITLE . TAGLINE);
-  define('META_TAG_DESCRIPTION', TITLE . PRIMARY_SECTION . (defined('NAVBAR_TITLE') ? NAVBAR_TITLE : '' ) . SECONDARY_SECTION . KEYWORDS);
-  define('META_TAG_KEYWORDS', KEYWORDS . METATAGS_DIVIDER . (defined('NAVBAR_TITLE') ? NAVBAR_TITLE : '' ) );
+  if (!defined ('META_TAG_TITLE')) define('META_TAG_TITLE', (defined('NAVBAR_TITLE') ? NAVBAR_TITLE . PRIMARY_SECTION : '') . TITLE . TAGLINE);
+  if (!defined ('META_TAG_DESCRIPTION')) define('META_TAG_DESCRIPTION', TITLE . PRIMARY_SECTION . (defined('NAVBAR_TITLE') ? NAVBAR_TITLE : '' ) . SECONDARY_SECTION . KEYWORDS);
+  if (!defined ('META_TAG_KEYWORDS')) define('META_TAG_KEYWORDS', KEYWORDS . METATAGS_DIVIDER . (defined('NAVBAR_TITLE') ? NAVBAR_TITLE : '' ) );
+  break;
+//-eof-ezpages_metatags-lat9  *** 1 of 1 ***
+
 }
 
 // meta tags override due to 404, missing products_id, cPath or other EOF issues

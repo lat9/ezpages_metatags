@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Manufacturers Meta-Tags for Zen Cart&reg;</title>
+
+<style type="text/css">
+<!--
+a, a:active, a:visited { color: #006666; text-decoration: none; }
+a:hover { color:#00CC99; text-decoration: underline; }
+body, p, h1, h2, h3, h4, h5, h6, li, td, dd, dt { font-family: Verdana, AvantGarde, Tahoma, Arial, sans-serif; font-size: 10pt; color: black; padding: 0px; margin: 20px; }
+pre { margin: 20px; }
+H1, H2, H3, H4 { font-weight: bold }
+h1 { font-size: 20px; }
+h2 { font-size: 16px; }
+ol li, ul li { margin: 5px 0; }
+.corefile, .impt { color: red; }
+.template { color: blue; }
+img { margin-left: 20px; max-width: 95%; }
+-->
+</style>
+</head>
+
+<body>
+<h1>EZ-Pages Meta-Tags &mdash; for Zen Cart v1.5.1 through v1.5.4</h1>
+<h3>Version 3.0.0</h3>
+<p>Current Support Thread at Zen Cart Forums: <a href="http://www.zen-cart.com/showthread.php?53799-meta-tags-and-title-descriptions-for-EZpages-and-other-pages" target="_blank">http://www.zen-cart.com/showthread.php?53799-meta-tags-and-title-descriptions-for-EZpages-and-other-pages</a></p>
+
+<hr />
+<h2>What it does</h2>
+<p>This plugin adds three (3) additional fields in your admin's <em>Tools-&gt;EZ-Pages</em> where you can enter the meta title, keywords and description for each page.  Values you enter here override the built-in Zen Cart meta-tag processing for that page.  The admin-level tool is updated to show the meta-tags' on/off icons depending on whether or not meta-tags have been defined for a given EZ-Page.</p>
+
+<p>Three additional fields are added to your Zen Cart's <code>ezpages</code> table by the plugin's admin-level auto-installer:</p>
+<ol>
+  <li>pages_meta_title</li>
+  <li>pages_meta_keywords</li>
+  <li>pages_meta_description</li>
+</ol>
+
+<hr />
+<h2>Installation</h2>
+<p>This plugin has <span class="corefile">core-file overwrites</span> and one <span class="template">template-override</span> file; you should <strong>always</strong> backup your cart's database and files prior to making any changes.</p>
+<ol>
+  <li>Unzip the plugin's package file, which you've most likely already done if you're reading this!</li>
+  <li>Rename the /YOUR_ADMIN directory to match your Zen Cart's secret admin-folder name.</li>
+  <li>Rename the one template-override directory (/includes/modules/YOUR_TEMPLATE) to match your cart's active template folder.</li>
+  <li>Make a copy of your current <span class="corefile">/YOUR_ADMIN/ezpages.php</span> file; if you've made previous changes to that file, you'll need to merge those changes with this plugin's updates.</li>
+  <li>If you've made previous changes to <span class="template">/includes/modules/YOUR_TEMPLATE/meta_tags.php</span>, you'll need to merge those changes with this plugin's updates.</li>
+  <li>Copy <b>only</b> the plugin's <b>admin-level</b> files to your store's file system.<ol>
+    <li><span class="corefile">/YOUR_ADMIN/ezpages.php</span></li>
+    <li>/YOUR_ADMIN/includes/auto_loaders/config.zc154_compatibility.php</li>
+    <li>/YOUR_ADMIN/includes/functions/extra_functions/ezpages_metatags_admin_extra_functions.php</li>
+    <li>/YOUR_ADMIN/includes/init_includes/init_zc154_compatibility.php</li>
+    <li><span class="corefile">/YOUR_ADMIN/includes/languages/english/ezpages.php</span></li>
+  </ol></li>
+  <li>Log into your Zen Cart admin-console; this will cause the auto-installer to run, adding the three new fields to the <code>ezpages</code> database table.</li>
+  <li>Copy the plugin's <b>store-side</b> file to your store's file system.<ol>
+    <li><span class="template">/includes/modules/YOUR_TEMPLATE/meta_tags.php</span></li>
+  </ol></li>
+</ol>
+
+<hr />
+<h2>Version History</h2>
+<ul>
+  <li>v1.0.0, 2008-07-10 (ebspromo): Initial Release for Zen Cart v1.3.8</li>
+  <li>v2.0.0, 2012-03-30 (ScriptJunkie): Zen Cart v1.5.0 Updates<ol>
+    <li>Updated core- and template-override files to be compatible with Zen Cart v1.5.0.</li>
+    <li>Clarified the installation instructions.</li>
+    <li>Cleaned up the README file and brought it up to date.</li>
+  </ol></li>
+  <li>v2.1.0, 2012-08-91 (swguy): Added support for Zen Cart v1.3.9</li>
+  <li>v3.0.0, 2015-01-30 (lat9):<ol>
+    <li>Include database setup in an admin-level auto-installer &mdash; no more SQL installation script.</li>
+    <li>Update core-file and template-override basis to Zen Cart v1.5.4.</li>
+    <li>Standardize admin and template-override folder names for the distribution.</li>
+    <li>Add meta-tags' on/off icons to <em>Tools-&gt;EZ-Pages</em> main-screen display.</li>
+    <li>Support for Zen Cart versions prior to v1.5.1 removed.</li>
+  </ol></li>
+</ul>
+
+</body>
+</html>

@@ -1,18 +1,20 @@
 <?php
 /**
  * @package admin
- * @copyright Copyright 2003-2011 Zen Cart Development Team
+ * @copyright Copyright 2003-2014 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: ezpages.php 19330 2011-08-07 06:32:56Z drbyte $
+ * @version GIT: $Id: Author: DrByte  Jun 30 2014 Modified in v1.5.4 $
  */
 
 // Sets the status of a page
   function zen_set_ezpage_status($pages_id, $status, $status_field) {
   global $db;
     if ($status == '1') {
+      zen_record_admin_activity('EZ-Page ID ' . (int)$pages_id . ' [' . $status_field . '] changed to 0', 'info');
       return $db->Execute("update " . TABLE_EZPAGES . " set " . zen_db_input($status_field) . " = '0'  where pages_id = '" . (int)$pages_id . "'");
     } elseif ($status == '0') {
+      zen_record_admin_activity('EZ-Page ID ' . (int)$pages_id . ' [' . $status_field . '] changed to 1', 'info');
       return $db->Execute("update " . TABLE_EZPAGES . " set " . zen_db_input($status_field) . " = '1'  where pages_id = '" . (int)$pages_id . "'");
     } else {
       return -1;
@@ -43,16 +45,6 @@
         $action='';
         zen_redirect(zen_href_link(FILENAME_EZPAGES_ADMIN, 'page=' . $_GET['page'] . ($_GET['ezID'] != '' ? '&ezID=' . $_GET['ezID'] : '')));
         break;
-      case 'setflag':
-        if ( ($_GET['flag'] == '0') || ($_GET['flag'] == '1') ) {
-          zen_set_ezpage_status(zen_db_prepare_input($_GET['ezID']), zen_db_prepare_input($_GET['flag']));
-          $messageStack->add(SUCCESS_PAGE_STATUS_UPDATED, 'success');
-        } else {
-          $messageStack->add(ERROR_UNKNOWN_STATUS_FLAG, 'error');
-        }
-        zen_redirect(zen_href_link(FILENAME_EZPAGES_ADMIN, 'page=' . $_GET['page'] . '&ezID=' . $_GET['ezID']));
-        break;
-
       case 'page_open_new_window':
         zen_set_ezpage_status(zen_db_prepare_input($_GET['ezID']), zen_db_prepare_input($_GET['current']), 'page_open_new_window');
         $messageStack->add(SUCCESS_PAGE_STATUS_UPDATED, 'success');
@@ -87,11 +79,13 @@
       case 'update':
         if (isset($_POST['pages_id'])) $pages_id = zen_db_prepare_input($_POST['pages_id']);
         $pages_title = zen_db_prepare_input($_POST['pages_title']);
-		/***** BEGIN EZPAGES SEO MOD *****/
-        $pages_meta_title = zen_db_prepare_input($_POST['pages_meta_title']);
-        $pages_meta_keywords = zen_db_prepare_input($_POST['pages_meta_keywords']);
-        $pages_meta_description = zen_db_prepare_input($_POST['pages_meta_description']);
-		/**** END EZPAGES SEO MOD *****/		
+        
+//-bof-ezpages_metatags-lat9  *** 1 of xx ***
+        $pages_meta_title = zen_db_prepare_input ($_POST['pages_meta_title']);
+        $pages_meta_keywords = zen_db_prepare_input ($_POST['pages_meta_keywords']);
+        $pages_meta_description = zen_db_prepare_input ($_POST['pages_meta_description']);
+//-eof-ezpages_metatags-lat9  *** 1 of xx ***
+
         $page_open_new_window = (int)$_POST['page_open_new_window'];
         $page_is_ssl  = (int)$_POST['page_is_ssl'];
 
@@ -137,11 +131,13 @@
 
         if ($page_error == false) {
           $sql_data_array = array('pages_title' => $pages_title,
-		  /***** BEGIN EZPAGES SEO MOD *****/
-				  'pages_meta_title' => $pages_meta_title,
-				  'pages_meta_keywords' => $pages_meta_keywords,
-				  'pages_meta_description' => $pages_meta_description,
-		  /**** END EZPAGES SEO MOD *****/
+
+//-bof-ezpages_metatags-lat9  *** 2 of xx ***
+                                  'pages_meta_title' => $pages_meta_title,
+                                  'pages_meta_keywords' => $pages_meta_keywords,
+                                  'pages_meta_description' => $pages_meta_description,
+//-eof-ezpages_metatags-lat9  *** 2 of xx ***
+
                                   'page_open_new_window' => $page_open_new_window,
                                   'page_is_ssl' => $page_is_ssl,
                                   'alt_url' => $alt_url,
@@ -156,14 +152,16 @@
                                   'toc_sort_order' => $pages_toc_sort_order,
                                   'toc_chapter' => $toc_chapter,
                                   'pages_html_text' => $pages_html_text);
-
+                                  
           if ($action == 'insert') {
             zen_db_perform(TABLE_EZPAGES, $sql_data_array);
             $pages_id = $db->insert_ID();
             $messageStack->add(SUCCESS_PAGE_INSERTED, 'success');
+            zen_record_admin_activity('EZ-Page with ID ' . (int)$pages_id . ' added.', 'info');
           } elseif ($action == 'update') {
             zen_db_perform(TABLE_EZPAGES, $sql_data_array, 'update', "pages_id = '" . (int)$pages_id . "'");
             $messageStack->add(SUCCESS_PAGE_UPDATED, 'success');
+            zen_record_admin_activity('EZ-Page with ID ' . (int)$pages_id . ' updated.', 'info');
           }
 
           zen_redirect(zen_href_link(FILENAME_EZPAGES_ADMIN, (isset($_GET['page']) ? 'page=' . $_GET['page'] . '&' : '') . 'ezID=' . $pages_id));
@@ -184,6 +182,7 @@
         $pages_id = zen_db_prepare_input($_POST['ezID']);
         $db->Execute("delete from " . TABLE_EZPAGES . " where pages_id = '" . (int)$pages_id . "'");
         $messageStack->add(SUCCESS_PAGE_REMOVED, 'success');
+        zen_record_admin_activity('EZ-Page with ID ' . (int)$pages_id . ' deleted.', 'notice');
         zen_redirect(zen_href_link(FILENAME_EZPAGES_ADMIN, 'page=' . $_GET['page']));
         break;
     }
@@ -196,8 +195,8 @@
 <title><?php echo TITLE; ?></title>
 <link rel="stylesheet" type="text/css" href="includes/stylesheet.css">
 <link rel="stylesheet" type="text/css" href="includes/cssjsmenuhover.css" media="all" id="hoverJS">
-<script language="javascript" src="includes/menu.js"></script>
-<script language="javascript" src="includes/general.js"></script>
+<script type="text/javascript" src="includes/menu.js"></script>
+<script type="text/javascript" src="includes/general.js"></script>
 <script type="text/javascript">
   <!--
   function init()
@@ -214,7 +213,7 @@
 </script>
 <?php if ($editor_handler != '') include ($editor_handler); ?>
 </head>
-<body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" bgcolor="#FFFFFF" onLoad="init()">
+<body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" bgcolor="#FFFFFF" onLoad="init();">
 <?php require(DIR_WS_INCLUDES . 'header.php'); ?>
 <!-- header_eof //-->
 <!-- body //-->
@@ -262,11 +261,13 @@
     $form_action = 'insert';
 
     $parameters = array('pages_title' => '',
-/***** BEGIN EZPAGES SEO MOD *****/
-			'pages_meta_title' => '',
-			'pages_meta_keywords' => '',
-			'pages_meta_description' => '',
-/**** END EZPAGES SEO MOD *****/	
+    
+//-bof-ezpages_metatags-lat9  *** 5 of xx ***
+                        'pages_meta_title' => '',
+                        'pages_meta_keywords' => '',
+                        'pages_meta_description' => '',
+//-eof-ezpages_metatags-lat9  *** 5 of xx ***
+
                         'page_open_new_window' => '',
                         'page_is_ssl' => '',
                         'pages_html_text' => '',
@@ -361,27 +362,27 @@
           <tr>
             <td colspan="2"><?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
           </tr>
-<!--
-/***** BEGIN EZPAGES SEO MOD *****/
--->
+<?php
+//-bof-ezpages_metatags-lat9  *** 6 of xx ***
+?>
           <tr>
             <td class="main"><?php echo TEXT_PAGE_META_TITLE; ?></td>
-            <td class="main"><?php echo zen_draw_input_field('pages_meta_title', $ezInfo->pages_meta_title, zen_set_field_length(TABLE_EZPAGES, 'pages_meta_title'), false); ?></td>
+            <td class="main"><?php echo zen_draw_input_field('pages_meta_title', $ezInfo->pages_meta_title); ?></td>
           </tr>
           <tr>
             <td class="main"><?php echo TEXT_PAGE_META_KEYWORDS; ?></td>
-            <td class="main"><?php echo zen_draw_input_field('pages_meta_keywords', $ezInfo->pages_meta_keywords, zen_set_field_length(TABLE_EZPAGES, 'pages_meta_keywords'), false); ?></td>
+            <td class="main"><?php echo zen_draw_textarea_field ('pages_meta_keywords', 'soft', '100%', '3', htmlspecialchars ($ezInfo->pages_meta_keywords, ENT_COMPAT, CHARSET, TRUE)); ?></td>
           </tr>
           <tr>
             <td class="main"><?php echo TEXT_PAGE_META_DESCRIPTION; ?></td>
-            <td class="main"><?php echo zen_draw_input_field('pages_meta_description', $ezInfo->pages_meta_description, zen_set_field_length(TABLE_EZPAGES, 'pages_meta_description'), false); ?></td>
+            <td class="main"><?php echo zen_draw_textarea_field('pages_meta_description', 'soft', '100%', '5', htmlspecialchars ($ezInfo->pages_meta_description, ENT_COMPAT, CHARSET, TRUE)); ?></td>
           </tr>
           <tr>
             <td colspan="2"><?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
           </tr>
-<!--
-/**** END EZPAGES SEO MOD *****/
--->
+<?php
+//-eof-ezpages_metatags-lat9  *** 6 of xx ***
+?>
           <tr>
             <td colspan="2"><table border="0" cellspacing="4" cellpadding="4">
               <tr>
@@ -605,7 +606,7 @@ while (!$pages->EOF) {
                 <td class="dataTableContent" align="right"><?php echo $pages->fields['toc_chapter']; ?></td>
                 <td class="dataTableContent" align="right"><?php echo $pages->fields['toc_sort_order'] . '&nbsp;' . ($pages->fields['status_toc'] == 1 ? '<a href="' . zen_href_link(FILENAME_EZPAGES_ADMIN, 'action=status_toc&current=' . $pages->fields['status_toc'] . '&ezID=' . $pages->fields['pages_id'] . ($_GET['page'] > 0 ? '&page=' . $_GET['page'] : ''), 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_green_on.gif', IMAGE_ICON_STATUS_ON) . '</a>' : '<a href="' . zen_href_link(FILENAME_EZPAGES_ADMIN, 'action=status_toc&current=' . $pages->fields['status_toc'] . '&ezID=' . $pages->fields['pages_id'] . ($_GET['page'] > 0 ? '&page=' . $_GET['page'] : ''), 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_red_on.gif', IMAGE_ICON_STATUS_OFF) . '</a>'); ?></td>
                 <td class="dataTableContent" align="center">&nbsp;&nbsp;<?php echo '<a href="' . zen_href_link(FILENAME_EZPAGES_ADMIN,
-(isset($_GET['page']) ? 'page=' . $_GET['page'] . '&' : '') . (isset($ezInfo) && is_object($ezInfo) && ($pages->fields['pages_id'] == $ezInfo->pages_id)) ? 'ezID=' . $pages->fields['pages_id'] . '&action=new' : '') . '">' . zen_image(DIR_WS_IMAGES . 'icon_edit.gif', ICON_EDIT) . '</a>'; ?><?php if (isset($ezInfo) && is_object($ezInfo) && ($pages->fields['pages_id'] == $ezInfo->pages_id)) { echo zen_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . zen_href_link(FILENAME_EZPAGES_ADMIN, (isset($_GET['page']) ? 'page=' . $_GET['page'] . '&' : '') . (isset($pages->fields['pages_id']) ? 'ezID=' . $pages->fields['pages_id'] : '')) . '">' . zen_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?></td>
+(isset($_GET['page']) ? 'page=' . $_GET['page'] . '&' : '') . (isset($ezInfo) && is_object($ezInfo) && ($pages->fields['pages_id'] == $ezInfo->pages_id)) ? 'ezID=' . $pages->fields['pages_id'] . '&action=new' : '') . '">' . get_ezpage_metatags_icon ($pages->fields['pages_id']) . zen_image(DIR_WS_IMAGES . 'icon_edit.gif', ICON_EDIT) . '</a>'; //-ezpages_metatags-lat9  *** 7 of xx *** ?><?php if (isset($ezInfo) && is_object($ezInfo) && ($pages->fields['pages_id'] == $ezInfo->pages_id)) { echo zen_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . zen_href_link(FILENAME_EZPAGES_ADMIN, (isset($_GET['page']) ? 'page=' . $_GET['page'] . '&' : '') . (isset($pages->fields['pages_id']) ? 'ezID=' . $pages->fields['pages_id'] : '')) . '">' . zen_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?></td>
               </tr>
 <?php
 
