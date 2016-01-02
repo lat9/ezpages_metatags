@@ -1,8 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Manufacturers Meta-Tags for Zen Cart&reg;</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EZ-Pages Meta-Tags for Zen Cart&reg;</title>
 
 <style type="text/css">
 <!--
@@ -15,15 +16,16 @@ h1 { font-size: 20px; }
 h2 { font-size: 16px; }
 ol li, ul li { margin: 5px 0; }
 .corefile, .impt { color: red; }
-.template { color: blue; }
+.template { color: green; }
 img { margin-left: 20px; max-width: 95%; }
+.smaller { font-size: smaller; }
 -->
 </style>
 </head>
 
 <body>
-<h1>EZ-Pages Meta-Tags &mdash; for Zen Cart v1.5.1 through v1.5.4</h1>
-<h3>Version 3.0.0</h3>
+<h1>EZ-Pages Meta-Tags &mdash; for Zen Cart v1.5.1 through v1.5.5</h1>
+<h3>Version 3.1.0</h3>
 <p>Current Support Thread at Zen Cart Forums: <a href="http://www.zen-cart.com/showthread.php?53799-meta-tags-and-title-descriptions-for-EZpages-and-other-pages" target="_blank">http://www.zen-cart.com/showthread.php?53799-meta-tags-and-title-descriptions-for-EZpages-and-other-pages</a></p>
 
 <hr />
@@ -45,6 +47,7 @@ img { margin-left: 20px; max-width: 95%; }
   <li>Rename the /YOUR_ADMIN directory to match your Zen Cart's secret admin-folder name.</li>
   <li>Rename the one template-override directory (/includes/modules/YOUR_TEMPLATE) to match your cart's active template folder.</li>
   <li>Make a copy of your current <span class="corefile">/YOUR_ADMIN/ezpages.php</span> file; if you've made previous changes to that file, you'll need to merge those changes with this plugin's updates.</li>
+  <li>If your store uses a version of <b>Zen Cart prior to v1.5.5</b>, copy the plugin's file <code>/zc155/YOUR_ADMIN/includes/classes/object_info.php</code> to your cart's /YOUR_ADMIN/includes/classes folder, <span class="corefile">overwriting your current Zen Cart's core file</span>.  This is the version of the file included by Zen Cart v1.5.5 and it has added an additional function that is used by ezpages.php.</li>
   <li>If you've made previous changes to <span class="template">/includes/modules/YOUR_TEMPLATE/meta_tags.php</span>, you'll need to merge those changes with this plugin's updates.</li>
   <li>Copy <b>only</b> the plugin's <b>admin-level</b> files to your store's file system.<ol>
     <li><span class="corefile">/YOUR_ADMIN/ezpages.php</span></li>
@@ -75,6 +78,13 @@ img { margin-left: 20px; max-width: 95%; }
     <li>Standardize admin and template-override folder names for the distribution.</li>
     <li>Add meta-tags' on/off icons to <em>Tools-&gt;EZ-Pages</em> main-screen display.</li>
     <li>Support for Zen Cart versions prior to v1.5.1 removed.</li>
+  </ol></li>
+  <li>v3.1.0, 2015-01-02 (lat9):<ol>
+    <li>Update core- and template-override files to use Zen Cart v1.5.5 as their change-basis. An install (or upgrade) of this plugin on a version of Zen Cart prior to v1.5.5 requires the copying of an additional class file!.  The following files were changed/added:<ol>
+      <li><span class="template">/includes/modules/YOUR_TEMPLATE/meta_tags.php</span></li>
+      <li><span class="corefile">/YOUR_ADMIN/ezpages.php</span></li>
+      <li><span class="corefile">/pre_zc155/YOUR_ADMIN/includes/classes/object_info.php</span> <span class="added smaller">(Added)</span></li>
+    </ol></li>
   </ol></li>
 </ul>
 

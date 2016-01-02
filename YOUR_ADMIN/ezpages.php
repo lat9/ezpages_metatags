@@ -1,7 +1,7 @@
 <?php
 /**
  * @package admin
- * @copyright Copyright 2003-2014 Zen Cart Development Team
+ * @copyright Copyright 2003-2015 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  * @version GIT: $Id: Author: DrByte  Jun 30 2014 Modified in v1.5.4 $
@@ -80,11 +80,11 @@
         if (isset($_POST['pages_id'])) $pages_id = zen_db_prepare_input($_POST['pages_id']);
         $pages_title = zen_db_prepare_input($_POST['pages_title']);
         
-//-bof-ezpages_metatags-lat9  *** 1 of xx ***
+//-bof-ezpages_metatags-lat9  *** 1 of 5 ***
         $pages_meta_title = zen_db_prepare_input ($_POST['pages_meta_title']);
         $pages_meta_keywords = zen_db_prepare_input ($_POST['pages_meta_keywords']);
         $pages_meta_description = zen_db_prepare_input ($_POST['pages_meta_description']);
-//-eof-ezpages_metatags-lat9  *** 1 of xx ***
+//-eof-ezpages_metatags-lat9  *** 1 of 5 ***
 
         $page_open_new_window = (int)$_POST['page_open_new_window'];
         $page_is_ssl  = (int)$_POST['page_is_ssl'];
@@ -132,11 +132,11 @@
         if ($page_error == false) {
           $sql_data_array = array('pages_title' => $pages_title,
 
-//-bof-ezpages_metatags-lat9  *** 2 of xx ***
+//-bof-ezpages_metatags-lat9  *** 2 of 5 ***
                                   'pages_meta_title' => $pages_meta_title,
                                   'pages_meta_keywords' => $pages_meta_keywords,
                                   'pages_meta_description' => $pages_meta_description,
-//-eof-ezpages_metatags-lat9  *** 2 of xx ***
+//-eof-ezpages_metatags-lat9  *** 2 of 5 ***
 
                                   'page_open_new_window' => $page_open_new_window,
                                   'page_is_ssl' => $page_is_ssl,
@@ -207,7 +207,6 @@
       var kill = document.getElementById('hoverJS');
       kill.disabled = true;
     }
-  if (typeof _editor_url == "string") HTMLArea.replaceAll();
   }
   // -->
 </script>
@@ -262,11 +261,11 @@
 
     $parameters = array('pages_title' => '',
     
-//-bof-ezpages_metatags-lat9  *** 5 of xx ***
+//-bof-ezpages_metatags-lat9  *** 3 of 5 ***
                         'pages_meta_title' => '',
                         'pages_meta_keywords' => '',
                         'pages_meta_description' => '',
-//-eof-ezpages_metatags-lat9  *** 5 of xx ***
+//-eof-ezpages_metatags-lat9  *** 3 of 5 ***
 
                         'page_open_new_window' => '',
                         'page_is_ssl' => '',
@@ -295,9 +294,9 @@
 
       $page_query = "select * from " . TABLE_EZPAGES . " where pages_id = '" . (int)$_GET['ezID'] . "'";
       $page = $db->Execute($page_query);
-      $ezInfo->objectInfo($page->fields);
+      $ezInfo->updateObjectInfo($page->fields);
     } elseif (zen_not_null($_POST)) {
-      $ezInfo->objectInfo($_POST);
+      $ezInfo->updateObjectInfo($_POST);
     }
 
 // set all status settings and switches
@@ -363,7 +362,7 @@
             <td colspan="2"><?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
           </tr>
 <?php
-//-bof-ezpages_metatags-lat9  *** 6 of xx ***
+//-bof-ezpages_metatags-lat9  *** 4 of 5 ***
 ?>
           <tr>
             <td class="main"><?php echo TEXT_PAGE_META_TITLE; ?></td>
@@ -381,7 +380,7 @@
             <td colspan="2"><?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
           </tr>
 <?php
-//-eof-ezpages_metatags-lat9  *** 6 of xx ***
+//-eof-ezpages_metatags-lat9  *** 4 of 5 ***
 ?>
           <tr>
             <td colspan="2"><table border="0" cellspacing="4" cellpadding="4">
@@ -464,7 +463,7 @@
           </tr>
           <tr>
             <td valign="top" class="main"><?php echo TEXT_PAGES_HTML_TEXT; ?></td>
-            <td class="main"><?php echo zen_draw_textarea_field('pages_html_text', 'soft', '100%', '40', htmlspecialchars($ezInfo->pages_html_text, ENT_COMPAT, CHARSET, TRUE));?></td>
+            <td class="main"><?php echo zen_draw_textarea_field('pages_html_text', 'soft', '100%', '40', htmlspecialchars($ezInfo->pages_html_text, ENT_COMPAT, CHARSET, TRUE), 'class="editorHook"');?></td>
           </tr>
 
           <tr>
@@ -605,8 +604,7 @@ while (!$pages->EOF) {
                 <td class="dataTableContent" align="right"><?php echo $pages->fields['footer_sort_order'] . '&nbsp;' . ($pages->fields['status_footer'] == 1 ? '<a href="' . zen_href_link(FILENAME_EZPAGES_ADMIN, 'action=status_footer&current=' . $pages->fields['status_footer'] . '&ezID=' . $pages->fields['pages_id'] . ($_GET['page'] > 0 ? '&page=' . $_GET['page'] : ''), 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_green_on.gif', IMAGE_ICON_STATUS_ON) . '</a>' : '<a href="' . zen_href_link(FILENAME_EZPAGES_ADMIN, 'action=status_footer&current=' . $pages->fields['status_footer'] . '&ezID=' . $pages->fields['pages_id'] . ($_GET['page'] > 0 ? '&page=' . $_GET['page'] : ''), 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_red_on.gif', IMAGE_ICON_STATUS_OFF) . '</a>'); ?></td>
                 <td class="dataTableContent" align="right"><?php echo $pages->fields['toc_chapter']; ?></td>
                 <td class="dataTableContent" align="right"><?php echo $pages->fields['toc_sort_order'] . '&nbsp;' . ($pages->fields['status_toc'] == 1 ? '<a href="' . zen_href_link(FILENAME_EZPAGES_ADMIN, 'action=status_toc&current=' . $pages->fields['status_toc'] . '&ezID=' . $pages->fields['pages_id'] . ($_GET['page'] > 0 ? '&page=' . $_GET['page'] : ''), 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_green_on.gif', IMAGE_ICON_STATUS_ON) . '</a>' : '<a href="' . zen_href_link(FILENAME_EZPAGES_ADMIN, 'action=status_toc&current=' . $pages->fields['status_toc'] . '&ezID=' . $pages->fields['pages_id'] . ($_GET['page'] > 0 ? '&page=' . $_GET['page'] : ''), 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_red_on.gif', IMAGE_ICON_STATUS_OFF) . '</a>'); ?></td>
-                <td class="dataTableContent" align="center">&nbsp;&nbsp;<?php echo '<a href="' . zen_href_link(FILENAME_EZPAGES_ADMIN,
-(isset($_GET['page']) ? 'page=' . $_GET['page'] . '&' : '') . (isset($ezInfo) && is_object($ezInfo) && ($pages->fields['pages_id'] == $ezInfo->pages_id)) ? 'ezID=' . $pages->fields['pages_id'] . '&action=new' : '') . '">' . get_ezpage_metatags_icon ($pages->fields['pages_id']) . zen_image(DIR_WS_IMAGES . 'icon_edit.gif', ICON_EDIT) . '</a>'; //-ezpages_metatags-lat9  *** 7 of xx *** ?><?php if (isset($ezInfo) && is_object($ezInfo) && ($pages->fields['pages_id'] == $ezInfo->pages_id)) { echo zen_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . zen_href_link(FILENAME_EZPAGES_ADMIN, (isset($_GET['page']) ? 'page=' . $_GET['page'] . '&' : '') . (isset($pages->fields['pages_id']) ? 'ezID=' . $pages->fields['pages_id'] : '')) . '">' . zen_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?></td>
+                <td class="dataTableContent" align="center">&nbsp;&nbsp;<?php echo '<a href="' . zen_href_link(FILENAME_EZPAGES_ADMIN, (isset($_GET['page']) ? 'page=' . $_GET['page'] . '&' : '') . (isset($ezInfo) && is_object($ezInfo) && ($pages->fields['pages_id'] == $ezInfo->pages_id)) ? 'ezID=' . $pages->fields['pages_id'] . '&action=new' : '') . '">' . get_ezpage_metatags_icon ($pages->fields['pages_id']) . zen_image(DIR_WS_IMAGES . 'icon_edit.gif', ICON_EDIT) . '</a>'; //-ezpages_metatags-lat9  *** 5 of 5 *** ?><?php if (isset($ezInfo) && is_object($ezInfo) && ($pages->fields['pages_id'] == $ezInfo->pages_id)) { echo zen_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . zen_href_link(FILENAME_EZPAGES_ADMIN, (isset($_GET['page']) ? 'page=' . $_GET['page'] . '&' : '') . (isset($pages->fields['pages_id']) ? 'ezID=' . $pages->fields['pages_id'] : '')) . '">' . zen_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?></td>
               </tr>
 <?php
 
