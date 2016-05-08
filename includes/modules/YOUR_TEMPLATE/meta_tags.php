@@ -3,10 +3,10 @@
  * meta_tags module
  *
  * @package modules
- * @copyright Copyright 2003-2015 Zen Cart Development Team
+ * @copyright Copyright 2003-2016 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: meta_tags.php drbyte  Modified in v1.5.5 $
+ * @version $Id: Author: DrByte  Mon Feb 8 15:28:43 2016 -0500 Modified in v1.5.5 $
  */
 $meta_tags_over_ride = false;
 $metatag_page_name = $current_page_base;
@@ -66,6 +66,10 @@ switch ($metatag_page_name) {
   break;
 
   case 'advanced_search_result':
+  define('META_TAG_TITLE', NAVBAR_TITLE_2 . ' -> ' . zen_output_string_protected($keywords) . ' ' . PRIMARY_SECTION . TITLE . TAGLINE);
+  define('META_TAG_DESCRIPTION', '');
+  define('META_TAG_KEYWORDS', '');
+  break;
   case 'password_forgotten':
   define('META_TAG_TITLE', NAVBAR_TITLE_2 . PRIMARY_SECTION . TITLE . TAGLINE);
   define('META_TAG_DESCRIPTION', TITLE . PRIMARY_SECTION . NAVBAR_TITLE_2 . SECONDARY_SECTION . KEYWORDS);
