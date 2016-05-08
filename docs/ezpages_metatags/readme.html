@@ -65,13 +65,19 @@ img { margin-left: 20px; max-width: 95%; }
 <hr />
 <h2>Version History</h2>
 <ul>
-  <li>v1.0.0, 2008-07-10 (ebspromo): Initial Release for Zen Cart v1.3.8</li>
-  <li>v2.0.0, 2012-03-30 (ScriptJunkie): Zen Cart v1.5.0 Updates<ol>
-    <li>Updated core- and template-override files to be compatible with Zen Cart v1.5.0.</li>
-    <li>Clarified the installation instructions.</li>
-    <li>Cleaned up the README file and brought it up to date.</li>
+  <li>v3.1.1, 2016-05-08 (lat9):<ol>
+    <li>Picked up a change to the meta_tags.php script introduced in Zen Cart 1.5.5a; correct the meta-tags entry in the admin-console to &quot;play nice&quot; with any installed HTML editor.  The following files were changed/added:<ol>
+      <li><span class="template">/includes/modules/YOUR_TEMPLATE/meta_tags.php</span></li>
+      <li><span class="corefile">/YOUR_ADMIN/ezpages.php</span></li>
+    </ol></li>
   </ol></li>
-  <li>v2.1.0, 2012-08-91 (swguy): Added support for Zen Cart v1.3.9</li>
+  <li>v3.1.0, 2016-01-02 (lat9):<ol>
+    <li>Update core- and template-override files to use Zen Cart v1.5.5 as their change-basis. An install (or upgrade) of this plugin on a version of Zen Cart prior to v1.5.5 requires the copying of an additional class file!.  The following files were changed/added:<ol>
+      <li><span class="template">/includes/modules/YOUR_TEMPLATE/meta_tags.php</span></li>
+      <li><span class="corefile">/YOUR_ADMIN/ezpages.php</span></li>
+      <li><span class="corefile">/pre_zc155/YOUR_ADMIN/includes/classes/object_info.php</span> <span class="added smaller">(Added)</span></li>
+    </ol></li>
+  </ol></li>
   <li>v3.0.0, 2015-01-30 (lat9):<ol>
     <li>Include database setup in an admin-level auto-installer &mdash; no more SQL installation script.</li>
     <li>Update core-file and template-override basis to Zen Cart v1.5.4.</li>
@@ -79,13 +85,13 @@ img { margin-left: 20px; max-width: 95%; }
     <li>Add meta-tags' on/off icons to <em>Tools-&gt;EZ-Pages</em> main-screen display.</li>
     <li>Support for Zen Cart versions prior to v1.5.1 removed.</li>
   </ol></li>
-  <li>v3.1.0, 2015-01-02 (lat9):<ol>
-    <li>Update core- and template-override files to use Zen Cart v1.5.5 as their change-basis. An install (or upgrade) of this plugin on a version of Zen Cart prior to v1.5.5 requires the copying of an additional class file!.  The following files were changed/added:<ol>
-      <li><span class="template">/includes/modules/YOUR_TEMPLATE/meta_tags.php</span></li>
-      <li><span class="corefile">/YOUR_ADMIN/ezpages.php</span></li>
-      <li><span class="corefile">/pre_zc155/YOUR_ADMIN/includes/classes/object_info.php</span> <span class="added smaller">(Added)</span></li>
-    </ol></li>
+  <li>v2.1.0, 2012-08-91 (swguy): Added support for Zen Cart v1.3.9</li>
+  <li>v2.0.0, 2012-03-30 (ScriptJunkie): Zen Cart v1.5.0 Updates<ol>
+    <li>Updated core- and template-override files to be compatible with Zen Cart v1.5.0.</li>
+    <li>Clarified the installation instructions.</li>
+    <li>Cleaned up the README file and brought it up to date.</li>
   </ol></li>
+  <li>v1.0.0, 2008-07-10 (ebspromo): Initial Release for Zen Cart v1.3.8</li>
 </ul>
 
 </body>

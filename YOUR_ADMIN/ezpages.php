@@ -370,11 +370,11 @@
           </tr>
           <tr>
             <td class="main"><?php echo TEXT_PAGE_META_KEYWORDS; ?></td>
-            <td class="main"><?php echo zen_draw_textarea_field ('pages_meta_keywords', 'soft', '100%', '3', htmlspecialchars ($ezInfo->pages_meta_keywords, ENT_COMPAT, CHARSET, TRUE)); ?></td>
+            <td class="main"><?php echo zen_draw_textarea_field ('pages_meta_keywords', 'soft', '100%', '3', htmlspecialchars ($ezInfo->pages_meta_keywords, ENT_COMPAT, CHARSET, TRUE), 'class="noEditor"'); ?></td>
           </tr>
           <tr>
             <td class="main"><?php echo TEXT_PAGE_META_DESCRIPTION; ?></td>
-            <td class="main"><?php echo zen_draw_textarea_field('pages_meta_description', 'soft', '100%', '5', htmlspecialchars ($ezInfo->pages_meta_description, ENT_COMPAT, CHARSET, TRUE)); ?></td>
+            <td class="main"><?php echo zen_draw_textarea_field('pages_meta_description', 'soft', '100%', '5', htmlspecialchars ($ezInfo->pages_meta_description, ENT_COMPAT, CHARSET, TRUE), 'class="noEditor"'); ?></td>
           </tr>
           <tr>
             <td colspan="2"><?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
