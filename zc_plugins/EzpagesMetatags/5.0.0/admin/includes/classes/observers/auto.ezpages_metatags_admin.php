@@ -2,36 +2,37 @@
 // -----
 // Part of the EZ-Pages Metatags plugin, v4.0.0+, provided by lat9
 //
-// Copyright (C) 2015-2019, Vinos de Frutas Tropicales
+// Copyright (C) 2015-2026, Vinos de Frutas Tropicales
 //
-class EzPagesMetaTagsAdminObserver extends base 
+class zcObserverEzpagesMetatagsAdmin extends base
 {
-    protected $pages_meta_title,
-              $pages_meta_keywords,
-              $pages_meta_description;
-    function __construct() 
+    protected array $pages_meta_title;
+    protected array $pages_meta_keywords;
+    protected array $pages_meta_description;
+
+    function __construct()
     {
         // -----
         // Watch for various notifications from /admin/ezpages.php, _only_ when
         // that module is the "current_page" and the EZ-Pages' meta-tags fields
         // have been added to the ezpages_content table.
         //
-        if ($GLOBALS['current_page'] == (FILENAME_EZPAGES_ADMIN . '.php') && $GLOBALS['sniffer']->field_exists(TABLE_EZPAGES_CONTENT, 'pages_meta_title')) {
+        if ($GLOBALS['current_page'] === (FILENAME_EZPAGES_ADMIN . '.php')) {
             $this->attach(
-                $this, 
-                array(
+                $this,
+                [
                     'NOTIFY_ADMIN_EZPAGES_UPDATE_BASE',
                     'NOTIFY_ADMIN_EZPAGES_UPDATE_LANG_INSERT',
                     'NOTIFY_ADMIN_EZPAGES_UPDATE_LANG_UPDATE',
                     'NOTIFY_ADMIN_EZPAGES_NEW',
                     'NOTIFY_ADMIN_EZPAGES_FORM_FIELDS',
                     'NOTIFY_ADMIN_EZPAGES_EXTRA_ACTION_ICONS',
-                )
+                ]
             );
         }
     }
-  
-    function update (&$class, $eventID, $p1, &$p2, &$p3, &$p4, &$p5) 
+
+    function update(&$class, $eventID, $p1, &$p2, &$p3, &$p4, &$p5)
     {
         switch ($eventID) {
             // -----
@@ -53,24 +54,14 @@ class EzPagesMetaTagsAdminObserver extends base
 
             // -----
             // Preparing to insert a language-specific record associated with a just-inserted
-            // ezpage.  On entry:
+            // or existing ezpage.  On entry:
             //
             // $p1 ... (r/o) An associative array containing the 'pages_id' and 'language_id' for the insert.
             // $p2 ... (r/w) A reference to the to-be-written, language-specific ezpages_content record.
             //
             case 'NOTIFY_ADMIN_EZPAGES_UPDATE_LANG_INSERT':
-                $p2 = $this->addEzPagesMetaTagsFields($p2, $p1['pages_id'], $p1['languages_id']);
-                break;
-
-            // -----
-            // Preparing to update a language-specific record associated with an existing ezpage.
-            // On entry:
-            //
-            // $p1 ... (r/o) An associative array containing the 'pages_id' and 'language_id' for the update.
-            // $p2 ... (r/w) A reference to the to-be-written, language-specific ezpages_content record.
-            //
             case 'NOTIFY_ADMIN_EZPAGES_UPDATE_LANG_UPDATE':
-                $p2 = $this->addEzPagesMetaTagsFields($p2, $p1['pages_id'], $p1['languages_id']);
+                $p2 = $this->addEzPagesMetaTagsFields($p2, (int)$p1['languages_id']);
                 break;
 
             // -----
@@ -117,122 +108,124 @@ class EzPagesMetaTagsAdminObserver extends base
             //               Note that the status shown will be for the active language only!
             //
             case 'NOTIFY_ADMIN_EZPAGES_EXTRA_ACTION_ICONS':
-                $pages_id = $p1['pages_id'];
+                $pages_id = (int)$p1['pages_id'];
                 $check = $GLOBALS['db']->Execute(
                     "SELECT pages_meta_title, pages_meta_keywords, pages_meta_description
-                       FROM " . TABLE_EZPAGES_CONTENT . "
-                      WHERE pages_id = $pages_id
-                        AND languages_id = " . (int)$_SESSION['languages_id'] . "
-                      LIMIT 1"
+                   FROM " . TABLE_EZPAGES_CONTENT . "
+                  WHERE pages_id = $pages_id
+                    AND languages_id = " . (int)$_SESSION['languages_id'] . "
+                  LIMIT 1"
                 );
-                $epmt_onoff = ($check->EOF || empty($check->fields['pages_meta_title'] . $check->fields['pages_meta_keywords'] . $check->fields['pages_meta_description'])) ? 'off' : 'on';
+                $page_has_no_metatags = ($check->EOF || empty($check->fields['pages_meta_title'] . $check->fields['pages_meta_keywords'] . $check->fields['pages_meta_description']));
+                $epmt_onoff = $page_has_no_metatags ? 'off' : 'on';
+                $epmt_title = $page_has_no_metatags ? EZPAGES_METATAGS_ICON_TITLE_OFF : EZPAGES_METATAGS_ICON_TITLE_ON;
                 $pages_link = zen_href_link(FILENAME_EZPAGES_ADMIN, (isset($_GET['page']) ? 'page=' . (int)$_GET['page'] . '&amp;' : '') . "ezID=$pages_id&amp;action=new");
-                $p2 .= sprintf(EZPAGES_METATAGS_ICON, $pages_link, $epmt_onoff);
+                $p2 .= sprintf(EZPAGES_METATAGS_ICON, $pages_link, $epmt_onoff, $epmt_title);
                 break;
 
             default:
                 break;
         }
     }
-    
+
     // -----
     // Protected method to add the EZ-Page's meta-tags to any insert/update action.
     //
-    protected function addEzPagesMetaTagsFields($sql_data_array, $pages_id, $language_id)
+    protected function addEzPagesMetaTagsFields(array $sql_data_array, int $language_id): array
     {
         $sql_data_array['pages_meta_title'] = $this->pages_meta_title[$language_id];
         $sql_data_array['pages_meta_keywords'] = $this->pages_meta_keywords[$language_id];
         $sql_data_array['pages_meta_description'] = $this->pages_meta_description[$language_id];
         return $sql_data_array;
     }
-    
+
     // -----
     // Protected method to create the input area for the current EZ-page's metatag title.
     //
-    protected function createEzPageMetaTagTitleInput($pages_id)
+    protected function createEzPageMetaTagTitleInput(int $pages_id): array
     {
         $languages = $GLOBALS['languages'];
         $meta_inputs = '';
         foreach ($languages as $language) {
             $page_info = $GLOBALS['db']->Execute(
                 "SELECT *
-                   FROM " . TABLE_EZPAGES_CONTENT . "
-                  WHERE pages_id = $pages_id
-                    AND languages_id = {$language['id']}
-                  LIMIT 1"
+               FROM " . TABLE_EZPAGES_CONTENT . "
+              WHERE pages_id = $pages_id
+                AND languages_id = {$language['id']}
+              LIMIT 1"
             );
             $pages_meta_title = (!$page_info->EOF) ? $page_info->fields['pages_meta_title'] : '';
             $meta_inputs .= '<div class="input-group">';
             $meta_inputs .= '<span class="input-group-addon">' . zen_image(DIR_WS_CATALOG_LANGUAGES . $language['directory'] . '/images/' . $language['image'], $language['name']) . '</span>';
-            $meta_inputs .= zen_draw_input_field('pages_meta_title[' . $language['id'] . ']', htmlspecialchars($pages_meta_title, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_EZPAGES_CONTENT, 'pages_meta_title') . ' class="form-control"', true);
+            $meta_inputs .= zen_draw_input_field('pages_meta_title[' . $language['id'] . ']', htmlspecialchars($pages_meta_title, ENT_COMPAT, CHARSET, true), zen_set_field_length(TABLE_EZPAGES_CONTENT, 'pages_meta_title') . ' class="form-control"', false);
             $meta_inputs .= '</div><br>';
         }
-        return array(
-            'label' => array(
+        return [
+            'label' => [
                 'text' => EZPAGES_METATAGS_TITLE_LABEL,
-                'field_name' => 'pages_meta_title'
-            ),
+                'field_name' => 'pages_meta_title',
+            ],
             'input' => $meta_inputs,
-        );
+        ];
     }
-    
+
     // -----
     // Protected method to create the input area for the current EZ-page's metatag keywords.
     //
-    protected function createEzPageMetaTagKeywordsInput($pages_id)
+    protected function createEzPageMetaTagKeywordsInput(int $pages_id): array
     {
         $languages = $GLOBALS['languages'];
         $meta_inputs = '';
         foreach ($languages as $language) {
             $page_info = $GLOBALS['db']->Execute(
                 "SELECT *
-                   FROM " . TABLE_EZPAGES_CONTENT . "
-                  WHERE pages_id = $pages_id
-                    AND languages_id = {$language['id']}
-                  LIMIT 1"
+               FROM " . TABLE_EZPAGES_CONTENT . "
+              WHERE pages_id = $pages_id
+                AND languages_id = {$language['id']}
+              LIMIT 1"
             );
-            $pages_meta_keywords = (!$page_info->EOF) ? $page_info->fields['pages_meta_keywords'] : '';
+            $pages_meta_keywords = ($page_info->EOF || empty($page_info->fields['pages_meta_keywords'])) ? '' : $page_info->fields['pages_meta_keywords'];
             $meta_inputs .= '<div class="input-group">';
             $meta_inputs .= '<span class="input-group-addon">' . zen_image(DIR_WS_CATALOG_LANGUAGES . $language['directory'] . '/images/' . $language['image'], $language['name']) . '</span>';
-            $meta_inputs .= zen_draw_textarea_field('pages_meta_keywords[' . $language['id'] . ']', 'soft', '100%', '3', htmlspecialchars($pages_meta_keywords, ENT_COMPAT, CHARSET, TRUE), 'class="noEditor form-control"');
+            $meta_inputs .= zen_draw_textarea_field('pages_meta_keywords[' . $language['id'] . ']', 'soft', '100%', '3', htmlspecialchars($pages_meta_keywords, ENT_COMPAT, CHARSET, true), 'class="noEditor form-control"');
             $meta_inputs .= '</div><br>';
         }
-        return array(
-            'label' => array(
+        return [
+            'label' => [
                 'text' => EZPAGES_METATAGS_KEYWORDS_LABEL,
-                'field_name' => 'pages_meta_keywords'
-            ),
+                'field_name' => 'pages_meta_keywords',
+            ],
             'input' => $meta_inputs,
-        );
+        ];
     }
-    
+
     // -----
     // Protected method to create the input area for the current EZ-page's metatag description.
     //
-    protected function createEzPageMetaTagDescriptionInput($pages_id)
+    protected function createEzPageMetaTagDescriptionInput(int $pages_id): array
     {
         $languages = $GLOBALS['languages'];
         $meta_inputs = '';
         foreach ($languages as $language) {
             $page_info = $GLOBALS['db']->Execute(
                 "SELECT *
-                   FROM " . TABLE_EZPAGES_CONTENT . "
-                  WHERE pages_id = $pages_id
-                    AND languages_id = {$language['id']}
-                  LIMIT 1"
+               FROM " . TABLE_EZPAGES_CONTENT . "
+              WHERE pages_id = $pages_id
+                AND languages_id = {$language['id']}
+              LIMIT 1"
             );
-            $pages_meta_description = (!$page_info->EOF) ? $page_info->fields['pages_meta_description'] : '';
+            $pages_meta_description = ($page_info->EOF || empty($page_info->fields['pages_meta_description'])) ? '' : $page_info->fields['pages_meta_description'];
             $meta_inputs .= '<div class="input-group">';
             $meta_inputs .= '<span class="input-group-addon">' . zen_image(DIR_WS_CATALOG_LANGUAGES . $language['directory'] . '/images/' . $language['image'], $language['name']) . '</span>';
-            $meta_inputs .= zen_draw_textarea_field('pages_meta_description[' . $language['id'] . ']', 'soft', '100%', '3', htmlspecialchars($pages_meta_description, ENT_COMPAT, CHARSET, TRUE), 'class="noEditor form-control"');
+            $meta_inputs .= zen_draw_textarea_field('pages_meta_description[' . $language['id'] . ']', 'soft', '100%', '3', htmlspecialchars($pages_meta_description, ENT_COMPAT, CHARSET, true), 'class="noEditor form-control"');
             $meta_inputs .= '</div><br>';
         }
-        return array(
-            'label' => array(
+        return [
+            'label' => [
                 'text' => EZPAGES_METATAGS_DESC_LABEL,
-                'field_name' => 'pages_meta_description'
-            ),
+                'field_name' => 'pages_meta_description',
+            ],
             'input' => $meta_inputs,
-        );
+        ];
     }
 }

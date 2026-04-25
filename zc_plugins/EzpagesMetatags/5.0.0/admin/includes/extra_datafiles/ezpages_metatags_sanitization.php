@@ -4,10 +4,10 @@
 //
 // Copyright (C) 2019, Vinos de Frutas Tropicales
 //
-$epmt_sanitizer = AdminRequestSanitizer::getInstance();
+    $epmt_sanitizer = AdminRequestSanitizer::getInstance();
 
 // -----
 // Instruct the admin sanitizer to 'sanitize' the EZ-Pages' metatags values in a manner similar
 // to those for the products.
 //
-$epmt_sanitizer->addSimpleSanitization('META_TAGS', array('pages_meta_title', 'pages_meta_keywords', 'pages_meta_description'));
+    $epmt_sanitizer->addSimpleSanitization('META_TAGS', ['pages_meta_title', 'pages_meta_keywords', 'pages_meta_description']);
