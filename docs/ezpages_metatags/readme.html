@@ -2,11 +2,10 @@
 <html dir="ltr" lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EZ-Pages Meta-Tags for Zen Cart&reg;</title>
 
-<style type="text/css">
-<!--
+<style>
 a, a:active, a:visited { color: #006666; text-decoration: none; }
 a:hover { color:#00CC99; text-decoration: underline; }
 body, p, h1, h2, h3, h4, h5, h6, li, td, dd, dt { font-family: Verdana, AvantGarde, Tahoma, Arial, sans-serif; font-size: 10pt; color: black; padding: 0px; margin: 20px; }
@@ -21,126 +20,113 @@ img { margin-left: 20px; max-width: 95%; }
 .smaller { font-size: smaller; }
 .removed { text-decoration: line-through; }
 .added { color: blue; }
--->
+a[target=_blank] { text-decoration: underline; }
 </style>
 </head>
 
 <body>
-<h1>EZ-Pages Meta-Tags &mdash; for Zen Cart v1.5.6 and later</h1>
-<h3>Version 4.0.0, Copyright &copy; 2015-2019, <a href="https://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a> (lat9)</h3>
-<p>Current Support Thread at Zen Cart Forums: <a href="https://www.zen-cart.com/showthread.php?53799-meta-tags-and-title-descriptions-for-EZpages-and-other-pages" target="_blank">Click here</a>.</p>
-<p>GitHub Repository: <a href="https://github.com/lat9/ezpages_metatags" target="_blank">Click here</a>.</p>
+    <h1>EZ-Pages Meta-Tags &mdash; for Zen Cart v2.1.0 and later</h1>
+    <h3>Version 5.0.0, Copyright &copy; 2015-2026, <a href="https://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a> (lat9)</h3>
+    <p>Current Support Thread at Zen Cart Forums: <a href="https://www.zen-cart.com/showthread.php?53799-meta-tags-and-title-descriptions-for-EZpages-and-other-pages" target="_blank">https://www.zen-cart.com/showthread.php?53799-meta-tags-and-title-descriptions-for-EZpages-and-other-pages</a>.</p>
+    <p>GitHub Repository: <a href="https://github.com/lat9/ezpages_metatags" target="_blank">https://github.com/lat9/ezpages_metatags</a>.</p>
+    <p>Thanks to <a href="https://github.com/prosela" target="_blank">@proseLA</a> for doing the legwork to get the plugin encapsulated!</p>
 
-<hr />
-<h2>What it does</h2>
-<p>This plugin adds three (3) additional fields in your admin's <em>Tools-&gt;EZ-Pages</em> where you can enter the meta title, keywords and description for each page.  Values you enter here override the built-in Zen Cart meta-tag processing for that page.  The admin-level tool is updated to show the meta-tags' on/off icons depending on whether or not meta-tags have been defined for a given EZ-Page.</p>
+    <hr>
+    <h2>What it does</h2>
+    <p>This <b>now-encapsulated</b> plugin adds three (3) additional fields in your admin's <em>Tools :: EZ-Pages</em> where you can enter the meta title, keywords and description for each page.  Values you enter here override the built-in Zen Cart meta-tag processing for that page.  The admin-level tool is updated to show the meta-tags' on/off icons depending on whether or not meta-tags have been defined for a given EZ-Page.</p>
 
-<p>Three additional fields are added to your Zen Cart's <code>ezpages_content</code> table by the plugin's admin-level auto-installer:</p>
-<ol>
-  <li>pages_meta_title</li>
-  <li>pages_meta_keywords</li>
-  <li>pages_meta_description</li>
-</ol>
-<p><b>Notes:</b></p>
-<ol>
-  <li>If an EZ-Page has been configured to use an <em>External Link URL</em>, then the page's metatags are not used, since the link is going to an external page!</li>
-  <li>If a store has installed a version of <b><em>EZ-Pages Meta-Tags</em></b> <em>prior to</em> v4.0.0, the admin-installation copies any recording of the meta-tags' information from the site's <code>ezpages</code> table to the <code>ezpages_content</code> table &hellip; and then removes that content from the <code>ezpages</code> table.  Be sure to make a backup copy of your database prior to installation, if this applies to your store!</li>
-</ol>
+    <p>Three additional fields are added to your Zen Cart's <code>ezpages_content</code> table when the plugin is installed via the admin's <em>Modules :: Plugin Manager</em>:</p>
+    <ol>
+        <li>pages_meta_title</li>
+        <li>pages_meta_keywords</li>
+        <li>pages_meta_description</li>
+    </ol>
+    <p><b>Notes:</b></p>
+    <ol>
+        <li>Before you install <em>EZ-Pages Meta-Tags</em> v5.0.0 (or later), you'll need a working copy of Zen Cart 2.1.0 or later.</li>
+        <li>If an EZ-Page has been configured to use an <em>External Link URL</em>, then the page's metatags are not used, since the link is going to an external page!</li>
+        <li>If a store has installed a version of <b><em>EZ-Pages Meta-Tags</em></b> <em>prior to</em> v4.0.0, the admin-installation copies any recording of the meta-tags' information from the site's <code>ezpages</code> table to the <code>ezpages_content</code> table &hellip; and then removes that content from the <code>ezpages</code> table.  Be sure to make a backup copy of your database prior to installation, if this applies to your store!</li>
+        <li>If you're installing on a site that has a version of this plugin <em>prior to 5.0.0</em> installed, the encapsulated-plugin's installation will <b class="impt">permanently delete</b> the files from the non-encapsulated version.</li>
+    </ol>
 
-<hr />
-<h2 id="install">Plugin Installation</h2>
-<p>This plugin has one <span class="corefile">core-file overwrite</span> and makes changes to your store's database; you should <strong>always</strong> backup your cart's database and files prior to making any changes.</p>
-<ol>
-  <li>Unzip the plugin's package file, which you've most likely already done if you're reading this!</li>
-  <li>Rename the /YOUR_ADMIN directory to match your Zen Cart's secret admin-folder name.</li>
-  <li>Make a copy of your current <span class="corefile">/YOUR_ADMIN/ezpages.php</span> file; if you've made previous changes to that file, you'll need to merge those changes with this plugin's updates.  Those updates add a series of notifications that are used by the plugin's admin-level &quot;observer&quot;.</li>
-  <li>Copy the plugin's files to your store's file system.<ol>
-    <li>/includes/auto_loaders/config.ezpages_metatags.php</li>
-    <li>/includes/classes/observers/EzPagesMetaTagsObserver.php</li>
-    <li><span class="corefile">/YOUR_ADMIN/ezpages.php</span></li>
-    <li>/YOUR_ADMIN/includes/auto_loaders/config.ezpages_metatags_admin.php</li>
-    <li>/YOUR_ADMIN/includes/classes/observers/EzPagesMetaTagsAdminObserver.php</li>
-    <li>/YOUR_ADMIN/includes/extra_datafiles/ezpages_metatags_sanitization.php</li>
-    <li>/YOUR_ADMIN/includes/functions/extra_functions/ezpages_metatags_admin_extra_functions.php</li>
-    <li>/YOUR_ADMIN/includes/init_includes/init_ezpages_metatags_admin.php</li>
-    <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/ezpages_metatags_extra_definitions.php</li>
-  </ol></li>
-  <li>Log into your Zen Cart admin-console; this will cause the auto-installer to run, adding the three new fields to the <code>ezpages_content</code> database table.</li>
-</ol>
+    <hr>
+    <h2>Installing, Upgrading or Uninstalling</h2>
+    <p>These sections identify the processes you'll use to initially install <em>EZ-Pages Meta-Tags</em>, upgrade or uninstall the plugin entirely.</p>
 
-<hr />
-<h2>Upgrading from a Version <em>Prior To</em> v4.0.0</h2>
-<p>If you are upgrading the <em>EZ-Pages Meta-Tags</em> from a version <em>prior to</em> v4.0.0, you'll need to first remove some of the core/template-file changes provided by those previous versions.</p>
-<ol>
-    <li>Delete these no longer used files:<ol>
-        <li>/YOUR_ADMIN/includes/auto_loaders/config.zc154_compatibility.php</li>
-        <li>/YOUR_ADMIN/includes/init_includes/init_zc154_compatibility.php</li>
-    </ol></li>
-    <li>Restore <span class="corefile">core-file</span> contents.  For each of these files, restore the files to their as-shipped Zen Cart version, merging any additional customizations that you might have made, but removing any sections associated with the plugin's previous version:<ol>
-        <li><span class="corefile">/YOUR_ADMIN/includes/classes/object_info.php</span></li>
-        <li><span class="corefile">/YOUR_ADMIN/includes/languages/english/ezpages.php</span></li>
-    </ol></li>
-    <li>Remove the plugin's previous version's changes from <span class="template">template-override</span> files.  If you have other customizations to this file, remove this plugin's prior additions.  If the <em>only</em> changes were from this plugin's prior versions, you can safely remove this file from your template's override directory &hellip; restoring the use of the default processing.<ol>
-        <li><span class="template">/includes/modules/YOUR_TEMPLATE/meta_tags.php</span></li>
-    </ol></li>
-</ol>
-<p>Once you've removed the plugin's previous versions' changes, continue your upgrade by following the <a href="#install">Plugin Installation</a> instructions.</p>
+    <h3>Initial Installation or Upgrade</h3>
+    <p>Start by copying the <em>EZ-Pages Meta-Tags</em> distribution's <code>zc_plugins</code> directory (and all its files) to the root of your site's file-system. You should see a <code>zc_plugins/EzpagesMetatags</code> sub-directory when completed and &hellip;</p>
+    <ol>
+        <li>Login to your Zen Cart's admin</li>
+        <li>Navigate to <em>Modules :: Plugin Manager</em>.</li>
+        <li>Click on the row that displays a <code>Plugin Key</code> of <b>EzpagesMetatags</b> and click the associated <b>Install</b> button.</li>
+        <li>All finished! You'll now see metatag-related fields when you add or edit an EZ-Page.</li>
+    </ol>
 
-<hr />
-<h2>Uninstalling</h2>
-<p>Delete the plugin's <em>new</em> files (see the <a href="#install">Plugin Installation</a> instructions) copied during the installation &mdash; the plugin's changes to your admin's <code>ezpages.php</code> can safely remain, as they're the simple additions of notifications. Finally, run the <strong>/docs/ezpages_metatags/uninstall/uninstall_ezpages_metatags.sql</strong> to remove the plugin's added fields from your database.</p>
+    <h3>Uninstalling</h3>
+    <p>To uninstall <em>EZ-Pages Meta-Tags</em> &hellip;</p>
+    <ol>
+        <li>Navigate to your Zen Cart admin's <em>Modules :: Plugin Manager</em>.</li>
+        <li>Click on the row that displays a <code>Plugin Key</code> of <b>EzpagesMetatags</b> and click the associated <b>Un-Install</b> button.</li>
+        <li>From the confirmation form, click that <b>Un-Install</b> button. That button-click will &quot;inactivate&quot; the plugin.</li>
+        <li>If you also want to remove the files associated with the plugin, click the <b>Clean Up</b> button.</li>
+    </ol>
 
-<hr />
-<h2>Version History</h2>
-<ul>
-  <li>v4.0.0, 2019-09-20 (lat9):<ul>
-    <li>CHANGE: Drop support for Zen Cart versions prior to 1.5.6.</li>
-    <li>CHANGE: Use Zen Cart 1.5.6c as the change-basis for the (now single!) <span class="corefile">core-file</span> overwrite!  The plugin's structure and distributed files have changed entirely.</li>
-    <li>The following files were changed/<span class="removed">removed</span>/<span class="added">added</span>:<ol>
-        <li><span class="added">/includes/auto_loaders/config.ezpages_metatags.php</span></li>
-        <li><span class="added">/includes/classes/observers/EzPagesMetaTagsObserver.php</span></li>
-        <li><span class="removed">/includes/modules/YOUR_TEMPLATE/meta_tags.php</span> <span class="smaller">(Removed from the plugin's distribution <em>only</em>; use the version that was distributed with your Zen Cart base files.)</span></li>
-        <li><span class="removed">/pre_zc155/YOUR_ADMIN/includes/classes/object_info.php</span> <span class="smaller">(Removed from the plugin's distribution <em>only</em>; use the version that was distributed with your Zen Cart base files.)</span></li>
-        <li><span class="corefile">/YOUR_ADMIN/ezpages.php</span></li>
-        <li><span class="added">/YOUR_ADMIN/includes/auto_loaders/config.ezpages_metatags_admin.php</span></li>
-        <li><span class="removed">/YOUR_ADMIN/includes/auto_loaders/config.zc154_compatibility.php</span></li>
-        <li><span class="added">/YOUR_ADMIN/includes/classes/observers/EzPagesMetaTagsAdminObserver.php</span></li>
-        <li><span class="added">/YOUR_ADMIN/includes/extra_datafiles/ezpages_metatags_sanitization.php</span></li>
-        <li>/YOUR_ADMIN/includes/functions/extra_functions/ezpages_metatags_admin_extra_functions.php</li>
-        <li><span class="added">/YOUR_ADMIN/includes/init_includes/init_ezpages_metatags_admin.php</span></li>
-        <li><span class="removed">/YOUR_ADMIN/includes/init_includes/init_zc154_compatibility.php</span></li>
-        <li><span class="added">/YOUR_ADMIN/includes/languages/english/extra_definitions/ezpages_metatags_extra_definitions.php</span></li>
-        <li><span class="removed">/YOUR_ADMIN/includes/languages/english/ezpages.php</span> <span class="smaller">(Removed from the plugin's distribution <em>only</em>; language constants are now in the plugin's language &quot;extra_definitions&quot;.)</span></li>
-    </ol></li>
-  </ul></li>
-  <li>v3.1.1, 2016-05-08 (lat9):<ul>
-    <li>Picked up a change to the meta_tags.php script introduced in Zen Cart 1.5.5a; correct the meta-tags entry in the admin-console to &quot;play nice&quot; with any installed HTML editor.  The following files were changed/added:<ol>
-      <li><span class="template">/includes/modules/YOUR_TEMPLATE/meta_tags.php</span></li>
-      <li><span class="corefile">/YOUR_ADMIN/ezpages.php</span></li>
-    </ol></li>
-  </ul></li>
-  <li>v3.1.0, 2016-01-02 (lat9):<ul>
-    <li>Update core- and template-override files to use Zen Cart v1.5.5 as their change-basis. An install (or upgrade) of this plugin on a version of Zen Cart prior to v1.5.5 requires the copying of an additional class file!.  The following files were changed/added:<ol>
-      <li><span class="template">/includes/modules/YOUR_TEMPLATE/meta_tags.php</span></li>
-      <li><span class="corefile">/YOUR_ADMIN/ezpages.php</span></li>
-      <li><span class="corefile">/pre_zc155/YOUR_ADMIN/includes/classes/object_info.php</span> <span class="added smaller">(Added)</span></li>
-    </ol></li>
-  </ul></li>
-  <li>v3.0.0, 2015-01-30 (lat9):<ul>
-    <li>Include database setup in an admin-level auto-installer &mdash; no more SQL installation script.</li>
-    <li>Update core-file and template-override basis to Zen Cart v1.5.4.</li>
-    <li>Standardize admin and template-override folder names for the distribution.</li>
-    <li>Add meta-tags' on/off icons to <em>Tools-&gt;EZ-Pages</em> main-screen display.</li>
-    <li>Support for Zen Cart versions prior to v1.5.1 removed.</li>
-  </ul></li>
-  <li>v2.1.0, 2012-08-91 (swguy): Added support for Zen Cart v1.3.9</li>
-  <li>v2.0.0, 2012-03-30 (ScriptJunkie): Zen Cart v1.5.0 Updates<ul>
-    <li>Updated core- and template-override files to be compatible with Zen Cart v1.5.0.</li>
-    <li>Clarified the installation instructions.</li>
-    <li>Cleaned up the README file and brought it up to date.</li>
-  </ul></li>
-  <li>v1.0.0, 2008-07-10 (ebspromo): Initial Release for Zen Cart v1.3.8</li>
-</ul>
+    <hr>
+    <h2>Version History</h2>
+    <ul>
+      <li>v5.0.0, 2026-04-25 (lat9, proseLA):<ul>
+        <li>CHANGE: Drop support for Zen Cart versions prior to 2.1.0.</li>
+        <li>CHANGE: Now distributed as an encapsulated plugin, thanks to @proseLA.</li>
+        <li>CHANGE: Note that the <em>Version History</em> updates for this and future releases will no longer identify the files changed!</li>
+      </ul></li>
+      <li>v4.0.0, 2019-09-20 (lat9):<ul>
+        <li>CHANGE: Drop support for Zen Cart versions prior to 1.5.6.</li>
+        <li>CHANGE: Use Zen Cart 1.5.6c as the change-basis for the (now single!) <span class="corefile">core-file</span> overwrite!  The plugin's structure and distributed files have changed entirely.</li>
+        <li>The following files were changed/<span class="removed">removed</span>/<span class="added">added</span>:<ol>
+            <li><span class="added">/includes/auto_loaders/config.ezpages_metatags.php</span></li>
+            <li><span class="added">/includes/classes/observers/EzPagesMetaTagsObserver.php</span></li>
+            <li><span class="removed">/includes/modules/YOUR_TEMPLATE/meta_tags.php</span> <span class="smaller">(Removed from the plugin's distribution <em>only</em>; use the version that was distributed with your Zen Cart base files.)</span></li>
+            <li><span class="removed">/pre_zc155/YOUR_ADMIN/includes/classes/object_info.php</span> <span class="smaller">(Removed from the plugin's distribution <em>only</em>; use the version that was distributed with your Zen Cart base files.)</span></li>
+            <li><span class="corefile">/YOUR_ADMIN/ezpages.php</span></li>
+            <li><span class="added">/YOUR_ADMIN/includes/auto_loaders/config.ezpages_metatags_admin.php</span></li>
+            <li><span class="removed">/YOUR_ADMIN/includes/auto_loaders/config.zc154_compatibility.php</span></li>
+            <li><span class="added">/YOUR_ADMIN/includes/classes/observers/EzPagesMetaTagsAdminObserver.php</span></li>
+            <li><span class="added">/YOUR_ADMIN/includes/extra_datafiles/ezpages_metatags_sanitization.php</span></li>
+            <li>/YOUR_ADMIN/includes/functions/extra_functions/ezpages_metatags_admin_extra_functions.php</li>
+            <li><span class="added">/YOUR_ADMIN/includes/init_includes/init_ezpages_metatags_admin.php</span></li>
+            <li><span class="removed">/YOUR_ADMIN/includes/init_includes/init_zc154_compatibility.php</span></li>
+            <li><span class="added">/YOUR_ADMIN/includes/languages/english/extra_definitions/ezpages_metatags_extra_definitions.php</span></li>
+            <li><span class="removed">/YOUR_ADMIN/includes/languages/english/ezpages.php</span> <span class="smaller">(Removed from the plugin's distribution <em>only</em>; language constants are now in the plugin's language &quot;extra_definitions&quot;.)</span></li>
+        </ol></li>
+      </ul></li>
+      <li>v3.1.1, 2016-05-08 (lat9):<ul>
+        <li>Picked up a change to the meta_tags.php script introduced in Zen Cart 1.5.5a; correct the meta-tags entry in the admin-console to &quot;play nice&quot; with any installed HTML editor.  The following files were changed/added:<ol>
+          <li><span class="template">/includes/modules/YOUR_TEMPLATE/meta_tags.php</span></li>
+          <li><span class="corefile">/YOUR_ADMIN/ezpages.php</span></li>
+        </ol></li>
+      </ul></li>
+      <li>v3.1.0, 2016-01-02 (lat9):<ul>
+        <li>Update core- and template-override files to use Zen Cart v1.5.5 as their change-basis. An install (or upgrade) of this plugin on a version of Zen Cart prior to v1.5.5 requires the copying of an additional class file!.  The following files were changed/added:<ol>
+          <li><span class="template">/includes/modules/YOUR_TEMPLATE/meta_tags.php</span></li>
+          <li><span class="corefile">/YOUR_ADMIN/ezpages.php</span></li>
+          <li><span class="corefile">/pre_zc155/YOUR_ADMIN/includes/classes/object_info.php</span> <span class="added smaller">(Added)</span></li>
+        </ol></li>
+      </ul></li>
+      <li>v3.0.0, 2015-01-30 (lat9):<ul>
+        <li>Include database setup in an admin-level auto-installer &mdash; no more SQL installation script.</li>
+        <li>Update core-file and template-override basis to Zen Cart v1.5.4.</li>
+        <li>Standardize admin and template-override folder names for the distribution.</li>
+        <li>Add meta-tags' on/off icons to <em>Tools-&gt;EZ-Pages</em> main-screen display.</li>
+        <li>Support for Zen Cart versions prior to v1.5.1 removed.</li>
+      </ul></li>
+      <li>v2.1.0, 2012-08-91 (swguy): Added support for Zen Cart v1.3.9</li>
+      <li>v2.0.0, 2012-03-30 (ScriptJunkie): Zen Cart v1.5.0 Updates<ul>
+        <li>Updated core- and template-override files to be compatible with Zen Cart v1.5.0.</li>
+        <li>Clarified the installation instructions.</li>
+        <li>Cleaned up the README file and brought it up to date.</li>
+      </ul></li>
+      <li>v1.0.0, 2008-07-10 (ebspromo): Initial Release for Zen Cart v1.3.8</li>
+    </ul>
 
 </body>
 </html>
