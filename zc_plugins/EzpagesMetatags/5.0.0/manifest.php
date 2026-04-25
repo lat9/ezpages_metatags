@@ -9,4 +9,5 @@ return [
     'changelog' => '',
     'github_repo' => '',
     'pluginGroups' => [],
+    'removesUnencapsulatedVersion' => true, // !empty presence indicates that non-encapsulated files are removed during install
 ];
